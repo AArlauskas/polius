@@ -32,6 +32,8 @@ public class SlackController {
 
         response.addAttachment(attachment);
 
+        response.setText(attachment.toString());
+
         return response;
     }
 }
