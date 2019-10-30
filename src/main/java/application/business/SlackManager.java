@@ -25,7 +25,7 @@ public class SlackManager {
 
     public SlackManager(){
         slack = Slack.getInstance();
-        token = "xoxp-788630701380-792156960199-803614060515-7e6edaaec8d989c76caf512d2844b779";
+        token = "xoxp-788630701380-792156960199-817302145462-de762997c760c13891768faad375c8c9";
     }
 
     public void sendInitialModalResponse(String triggerId){
