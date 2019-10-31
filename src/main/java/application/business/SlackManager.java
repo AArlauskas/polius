@@ -25,7 +25,7 @@ public class SlackManager {
 
     public SlackManager(){
         slack = Slack.getInstance();
-        token = "xoxp-788630701380-792156960199-817302145462-de762997c760c13891768faad375c8c9";
+        token = "xoxp-788630701380-792156960199-814638357476-9067376b0ac0c0dc57ae61448abe706d";
     }
 
     public void sendInitialModalResponse(String triggerId){
@@ -74,6 +74,61 @@ public class SlackManager {
                     .triggerId(triggerId));
 
             System.out.println(apiResponse);
+        } catch (IOException e) {
+            e.printStackTrace();
+        } catch (SlackApiException e) {
+            e.printStackTrace();
+        }
+    }
+
+    public void sendCreteQuestionsResponse(String triggerId)
+    {
+        LayoutBlock questionBlock1 = InputBlock.builder()
+                .label(PlainTextObject.builder().text("Question 1").build())
+                .element(PlainTextInputElement.builder()
+                        .actionId("question_action1")
+                        .multiline(false)
+                        .placeholder(PlainTextObject.builder().text("Question nr 1").build())
+                        .build())
+                .blockId("question_input1")
+                .build();
+
+        LayoutBlock questionBlock2 = InputBlock.builder()
+                .label(PlainTextObject.builder().text("Question 2").build())
+                .element(PlainTextInputElement.builder()
+                        .actionId("question_action1")
+                        .multiline(false)
+                        .placeholder(PlainTextObject.builder().text("Question nr 2").build())
+                        .build())
+                .blockId("question_input2")
+                .build();
+
+        LayoutBlock questionBlock3 = InputBlock.builder()
+                .label(PlainTextObject.builder().text("Question 3").build())
+                .element(PlainTextInputElement.builder()
+                        .actionId("question_action3")
+                        .multiline(false)
+                        .placeholder(PlainTextObject.builder().text("Question nr 3").build())
+                        .build())
+                .blockId("question_input3")
+                .build();
+
+        List<LayoutBlock> blocks = Arrays.asList(questionBlock1,questionBlock2,questionBlock3);
+
+        View view = View.builder()
+                .type("modal")
+                .callbackId("create_poll_callback")
+                .title(ViewTitle.builder().type("plain_text").text("Enter the questions").build())
+                .submit(ViewSubmit.builder().type("plain_text").text("Submit").build())
+                .close(ViewClose.builder().type("plain_text").text("Close").build())
+                .notifyOnClose(false)
+                .blocks(blocks)
+                .build();
+
+        try {
+            ViewsOpenResponse apiResponse = slack.methods(token).viewsOpen(req -> req
+                    .view(view)
+                    .triggerId(triggerId));
         } catch (IOException e) {
             e.printStackTrace();
         } catch (SlackApiException e) {

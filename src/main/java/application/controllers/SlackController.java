@@ -1,6 +1,9 @@
 package application.controllers;
 
 import application.business.SlackManager;
+import com.github.seratch.jslack.app_backend.interactive_messages.payload.BlockActionPayload;
+import com.github.seratch.jslack.common.json.GsonFactory;
+import com.google.gson.Gson;
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -20,8 +23,14 @@ public class SlackController {
         slackManager.sendInitialModalResponse(triggerId);
     }
 
-    @RequestMapping(value = "/slack/interact", method = RequestMethod.POST)
-    public void onInteraction(){
-        // Whenever an interaction with modal occurs
+    @RequestMapping(value = "/slack/interact", method = RequestMethod.POST, consumes = MediaType.APPLICATION_FORM_URLENCODED_VALUE)
+    public void onInteraction(@RequestParam(name = "payload") String payload){
+        Gson snakeCase = GsonFactory.createSnakeCase();
+        BlockActionPayload pl = snakeCase.fromJson(payload, BlockActionPayload.class);
+        System.out.println();
+        System.out.println();
+        System.out.println(pl);
+        System.out.println(pl.getTriggerId());
+        slackManager.sendInitialModalResponse(pl.getTriggerId());
     }
 }
